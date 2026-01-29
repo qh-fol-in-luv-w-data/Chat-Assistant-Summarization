@@ -3,23 +3,25 @@
 
 ---
 
-## 1. Mục tiêu project
+## 1. Project Goals
 
-Project này minh hoạ một **chat assistant backend** có:
+This project demonstrates a **chat assistant backend** with the following capabilities:
 
 ### Session Memory
-- Lưu hội thoại ngắn hạn (<= 10000 tokens)
-- Tự động **tóm tắt (summary)** khi context quá dài
+- Stores short-term conversation history (≤ 10,000 tokens)
+- Automatically **summarizes** the conversation when the context becomes too long
 
 ### Ambiguous Query Handling
-- Phát hiện câu hỏi mơ hồ / nhiều lỗi chính tả
-- Rewrite câu hỏi
-- **Hỏi lại để làm rõ (clarifying question)**
-- KHÔNG trả lời khi chưa rõ ý
+- Detects ambiguous queries or queries with heavy typos
+- Rewrites the query
+- **Asks clarifying questions**
+- Does **NOT** respond with an answer until the intent is clear
 
 ---
 
-## 2. Cấu trúc thư mục & giải thích từng file
+## 2. Directory Structure & File Overview
+
+
 
 ```
 chat_assistant/
@@ -42,55 +44,70 @@ chat_assistant/
 │
 └── README.md
 ```
-## 3. Giải thích từng file
-```main.py```
 
-- Entry point chính
-- Chạy chat assistant dạng CLI
-- Gọi run_query_pipeline
-- Kết hợp:
-    - session memory
-    - summary
-    - ambiguity handling
+---
 
+## 3. File-by-File Explanation
+
+ ```main.py```
+
+- Main entry point
+- Runs the chat assistant in CLI mode
+- Calls `run_query_pipeline`
+- Integrates:
+  - session memory
+  - summarization
+  - ambiguity handling
+
+---
 
 ```demo.py```
 
-- File demo để test 
-- Chạy sẵn 2 flow:
-    - Flow 1: hội thoại dài → sinh summary
-    - Flow 2: câu mơ hồ → hỏi lại
-- Không cần nhập tay
+- Demo script for testing
+- Runs two predefined flows:
+  - Flow 1: long conversation → triggers summary
+  - Flow 2: ambiguous query → asks for clarification
+- No manual input required
 
+---
 
 ```config.py```
 
-- Chứa các cấu hình chung:
-    - model name
-    - context limit
-    - summary threshold
+- Contains shared configuration:
+  - model name
+  - context limit
+  - summary threshold
+
+---
 
 ```requirements.txt```
 
-Danh sách các thư viện cần cài
+- List of required Python libraries
+
+---
 
 ```memory/session_store.py```
 
-Quản lý session memory
-Session gồm:
-    - summary
-    - recent messages
+- Manages session memory  
+- Each session includes:
+  - summary
+  - recent messages
+
+---
 
 ```memory/context_manager.py```
 
-- Theo dõi độ dài context
-- Kiểm tra khi nào vượt ngưỡng
-- Gọi LLM để tóm tắt hội thoại
-- Reset recent messages sau khi summary
+- Tracks context length
+- Checks when limits are exceeded
+- Calls the LLM to summarize the conversation
+- Resets recent messages after summarization
+
+---
 
 ```query/pipeline.py```
 
-Cài đặt run_query_pipeline
+Implements `run_query_pipeline`
+
 
 ```
 User Input
@@ -107,51 +124,74 @@ Update Session + Summary
 
 ```data/session.json```
 
-- Lưu trạng thái hội thoại hiện tại
-- Được tạo và cập nhật tự động và sẽ xoá sau khi summary để tránh tràn bộ nhớ
+- Stores the current session state
+- Automatically created and updated
+- Deleted after summarization to prevent memory overflow
 
 ```data/test_long.jsonl```
 
-- Dữ liệu test hội thoại dài
-- Dùng để:
-    - làm đầy context
-    - kích hoạt summary
+- Test data for long conversations
+- Used to:
+  - fill up context
+  - trigger summarization
 
+---
 ```data/test_ambiguous.jsonl```
 
-Dữ liệu test câu mơ hồ
+- Test data for ambiguous queries
+
+---
+
 
 ## 4. Cài đặt môi trường
-**4.1 Tạo virtual environment** 
+### 4.1 Tạo virtual environment** 
 ```
 python -m venv .venv
 source .venv/bin/activate
 ```
 
-**4.2 Cài đặt thư viện**
+
+---
+
+### 4.2 Install Dependencies
+
+
 ```
 pip install -r requirements.txt
 ```
 
-## 5. Cấu hình API Key
+
+---
+
+## 5. API Key Configuration
+
+
 
 ```
 export GOOGLE_API_KEY="YOUR_API_KEY"
 
 ```
-Dùng để set API Key để summary text, dùng bản free với model gemini-flash-2.5
 
-## 6. Chạy DEMO
+Used to set the API key for text summarization.  
+The free tier is used with the `gemini-flash-2.5` model.
+
+---
+
+## 6. Run the Demo
+
 ```
 python demo.py
 ```
-**Flow 1 — Session Memory + Summary**
 
-Input:
+---
 
-Một đoạn hội thoại dài giữa user và assistant
+### Flow 1 — Session Memory + Summary
 
-Output mẫu :
+**Input:**  
+A long conversation between the user and the assistant
+
+**Sample Output:**
+
 ```
 ==============================
 🚀 FLOW 1 — SESSION MEMORY DEMO
@@ -239,15 +279,21 @@ Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
 
 ```
 
-**Flow 2 - Ambiguous Query**
 
-Input:
+---
+
+### Flow 2 — Ambiguous Query
+
+**Input:**
+
 
 ```
 Tôi dawng awn com
 ```
 
-Output: 
+
+**Output:**
+
 
 ```
 ==============================
@@ -278,7 +324,11 @@ User query: Tôi dawng awn com
 Bạn có phải đang muốn nói 'Tôi đang ăn cơm' không?
 ```
 
-## 7. Test Real Time trên Chat Assistant
+
+---
+
+## 7. Real-Time Testing with the Chat Assistant
+
 
 ```
 python main.py
