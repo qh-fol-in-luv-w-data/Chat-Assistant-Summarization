@@ -239,6 +239,7 @@ Both GOOGLE_API_KEY and GEMINI_API_KEY are set. Using GOOGLE_API_KEY.
 ```
 
 **Flow 2 - Ambiguous Query**
+
 Input:
 
 ```
