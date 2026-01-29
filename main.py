@@ -9,13 +9,13 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 
 llm = ChatGoogleGenerativeAI(
     model=MODEL_NAME,
-    temperature=0.3
+    temperature=0.1
 )
 
 store = SessionStore(SESSION_FILE)
 ctx_mgr = ContextManager(store, MAX_CONTEXT_TOKENS, MODEL_NAME)
 
-print("💬 Chat Assistant (type 'exit' to quit)")
+print(" Chat Assistant (type 'exit' to quit)")
 
 while True:
     user_input = input("\nUser: ")
@@ -27,7 +27,7 @@ while True:
     # === FLOW 1: SESSION MEMORY TRIGGER ===
     summary = ctx_mgr.check_and_summarize()
     if summary:
-        print("✅ Session summary generated:")
+        print("Session summary generated:")
         print(summary)
 
     # === FLOW 2: QUERY UNDERSTANDING ===
@@ -42,7 +42,7 @@ while True:
         summary=session_summary
     )
 
-    print("\n🧠 Query Understanding Output:")
+    print("\n Query Understanding Output:")
     print(json.dumps(result, indent=2, ensure_ascii=False))
 
     # In câu trả lời cho user

@@ -13,7 +13,7 @@ def load_jsonl(path):
 
 def demo_session_memory():
     print("\n==============================")
-    print("🚀 FLOW 1 — SESSION MEMORY DEMO")
+    print("FLOW 1 — SESSION MEMORY DEMO")
     print("==============================")
 
     store = SessionStore(SESSION_FILE)
@@ -29,15 +29,15 @@ def demo_session_memory():
 
         summary = ctx_mgr.check_and_summarize()
         if summary:
-            print("\n⚠️ Context limit exceeded → summarizing")
-            print("🧠 Generated summary:")
+            print("\n Context limit exceeded → summarizing")
+            print(" Generated summary:")
             print(json.dumps(summary, indent=2, ensure_ascii=False))
             break
 
 
 def demo_ambiguous_query():
     print("\n==============================")
-    print("❓ FLOW 2 — AMBIGUOUS QUERY DEMO")
+    print(" FLOW 2 — AMBIGUOUS QUERY DEMO")
     print("==============================")
 
     llm = ChatGoogleGenerativeAI(
@@ -64,12 +64,12 @@ def demo_ambiguous_query():
     analysis = result["analysis"]
 
     print("User query:", query)
-    print("\n🧠 Analysis:")
+    print("\n Analysis:")
     print(json.dumps(analysis, indent=2, ensure_ascii=False))
 
-    print("\n💬 Assistant response:")
+    print("\n Assistant response:")
 
-    # === ✅ FLOW 2 DECISION LOGIC (QUAN TRỌNG) ===
+    # ===  FLOW 2 DECISION LOGIC (QUAN TRỌNG) ===
     if analysis.get("is_ambiguous", False):
         questions = analysis.get("clarifying_questions", [])
         if questions:
