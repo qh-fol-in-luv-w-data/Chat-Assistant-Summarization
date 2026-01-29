@@ -42,7 +42,7 @@ def demo_ambiguous_query():
 
     llm = ChatGoogleGenerativeAI(
         model=MODEL_NAME,
-        temperature=0.3
+        temperature=0.1
     )
 
     test_queries = load_jsonl("data/test_ambiguous.jsonl")
