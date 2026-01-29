@@ -146,7 +146,8 @@ Dùng để set API Key để summary text, dùng bản free với model gemini-
 python demo.py
 ```
 **Flow 1 — Session Memory + Summary**
-Intput:
+
+Input:
 
 Một đoạn hội thoại dài giữa user và assistant
 
